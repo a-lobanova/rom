@@ -121,6 +121,103 @@ add("Конъюнктив","Vreau ___ învăț româna. (пропущено сл
 add("Правописание","limba ___ (română)","română","â в середине, ă на конце");
 add("Правописание","la ___ (plimbare)","plimbare");
 
+/* Урок 15.11: tot / amândoi / ambii, артикль, acest-, al cui, îmi place, niște */
+[
+ ["Tot ___ muncește. (om)","omul"],
+ ["Toți ___ muncesc. (om)","oamenii"],
+ ["Toată ___ este caldă. (apă)","apa"],
+ ["Toate ___ sunt frumoase. (femeie)","femeile"],
+ ["tot: м.р. мн. число","toți"],
+ ["tot: ж.р. ед. число","toată"],
+ ["tot: ж.р. мн. число","toate"],
+ ["___ copiii se joacă. (оба, м.р.)","Amândoi"],
+ ["___ mamele fac cumpărături. (обе)","Amândouă"],
+ ["amândoi = ? (синоним)","ambii"],
+ ["amândouă = ? (синоним)","ambele"],
+ ["Ambii ___ se joacă. (copil, без артикля)","copii"],
+ ["Ambele ___ fac cumpărături. (mamă, без артикля)","mame"],
+ ["un produs — două ___","produse"],
+ ["soră — мн. число без артикля","surori"]
+].forEach(([q,a])=> add("Урок: tot / amândoi", q, a, "после tot / amândoi существительное с артиклем, после ambii/ambele без"));
+
+[
+ ["A apărut ___ . (lună)","luna"],
+ ["Au apărut ___ . (stea)","stelele"],
+ ["Am chemat ___ . (ambulanță)","ambulanța"],
+ ["Am servit ___ . (șampanie)","șampania"],
+ ["Am aflat ___ . (informație)","informația"],
+ ["___ au venit la școală. (elev)","Elevii"],
+ ["___ se joacă în curte. (copil)","Copiii"],
+ ["___ sunt gustoase. (clătită)","Clătitele"],
+ ["zi — ед. с артиклем","ziua"],
+ ["zi — мн. число без артикля","zile"],
+ ["Îmi ___ cafeaua. (a plăcea)","place"],
+ ["Îmi ___ florile. (a plăcea)","plac"],
+ ["Îmi plac ___ . (fruct, мн. с артиклем)","fructele"],
+ ["Îmi plac ___ . (copil, мн. с артиклем)","copiii"]
+].forEach(([q,a])=> add("Урок: артикль, известное", q, a, "известный или единственный предмет; после «îmi place/plac» артикль"));
+
+[
+ ["___ fată arată bine. (acest-)","Această"],
+ ["___ elevi sunt sârguincioși. (acest-)","Acești"],
+ ["___ bucătărese gătesc gustos. (acest-)","Aceste"],
+ ["___ aluat este foarte subțire. (acest-)","Acest"],
+ ["Domnișoara ___ arată bine. (acest-)","aceasta"],
+ ["Elevii ___ sunt sârguincioși. (acest-)","aceștia"],
+ ["Bucătăresele ___ gătesc gustos. (acest-)","acestea"],
+ ["Aluatul ___ este foarte subțire. (acest-)","acesta"],
+ ["valoarea ___ (acesta)","acestuia"],
+ ["valoarea ___ (aceasta)","acesteia"],
+ ["valoarea ___ (aceștia)","acestora"],
+ ["valoarea ___ (acestea)","acestora"]
+].forEach(([q,a])=> add("Урок: acest-", q, a, "перед существительным: без артикля; после: с артиклем"));
+
+[
+ ["___ cui este sacoul?","Al"],
+ ["___ cui sunt copiii aceștia?","Ai"],
+ ["___ cui sunt pixurile?","Ale"],
+ ["___ cui este rețeta? (ж.р. ед.)","A"],
+ ["___ mere sunt pe masă. (неопр. мн.)","Niște"],
+ ["În coș sunt ___ legume. (неопр. мн.)","niște"],
+ ["Niște mere sunt pe ___ aceasta. (masă)","masa"]
+].forEach(([q,a])=> add("Урок: al cui / niște", q, a));
+
+[
+ ["Mergem la ___ „Ștefan cel Mare”. (liceu)","Liceul"],
+ ["Mergem la ___ „Noroc”. (restaurant)","restaurantul"],
+ ["Mergem la ___ . (restaurant, без названия)","restaurant"],
+ ["Sub ___ este o minge. (scaun)","scaun"],
+ ["Sub ___ cel mare este o minge. (scaun)","scaunul"],
+ ["În ___ sunt niște legume. (coș)","coș"],
+ ["În ___ de lângă ușă sunt niște legume. (coș)","coșul"],
+ ["Merg cu ___ la mare. (părinți)","părinții"]
+].forEach(([q,a])=> add("Урок: артикль после предлога", q, a, "после предлога без артикля, но с названием или определением артикль есть"));
+
+[
+ ["În ___ 1991 Republica Moldova și-a proclamat independența. (an)","anul"],
+ ["Republica Moldova și-a proclamat ___ . (independență)","independența"],
+ ["___ cu brânză și mărar sunt preferatele mele. (plăcintă)","Plăcintele"],
+ ["___ Chișinău este situat pe șapte coline. (oraș)","Orașul"],
+ ["Chișinău este situat pe șapte ___ . (colină)","coline"],
+ ["___ aceasta oferă o perspectivă nouă. (carte)","Cartea"],
+ ["___ Național de Istorie a organizat o expoziție. (muzeu)","Muzeul"],
+ ["Toți ___ au admirat colecția. (vizitator)","vizitatorii"],
+ ["Au admirat ___ de costume populare. (colecție)","colecția"],
+ ["În ___ Butuceni pot vedea case vechi. (sat)","satul"],
+ ["___ Orheiul Vechi atrage anual mii de oameni. (rezervație)","Rezervația"],
+ ["Rezervația atrage anual mii de ___ . (om)","oameni"],
+ ["___ „Mărțișor” are loc la începutul lunii martie. (festival)","Festivalul"],
+ ["Festivalul are loc în fiecare ___ . (primăvară)","primăvară"],
+ ["___ oferirii mărțișorului este în patrimoniul UNESCO. (tradiție)","Tradiția"],
+ ["Tradiția a fost inclusă în ___ UNESCO. (patrimoniu)","patrimoniul"],
+ ["___ moldovenesc este apreciat. (covor)","Covorul"],
+ ["Covorul este apreciat pentru ___ motivelor sale. (frumusețe)","frumusețea"],
+ ["Bunica a pregătit o supă de ___ . (pui)","pui"],
+ ["___ Limbii Române este celebrată pe 31 august. (sărbătoare)","Sărbătoarea"],
+ ["Sărbătoarea este celebrată pe ___ de 31 august. (dată)","data"],
+ ["În ___ Soroca se află o cetate medievală. (raion)","raionul"]
+].forEach(([q,a])=> add("Урок: упражнения (Moldova)", q, a));
+
 /* ---------- Состояние ---------- */
 const INTERVALS = [0,1,3,7,14,30];   // дни для коробок 0..5
 const NEW_PER_DAY = 20;
