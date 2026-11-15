@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Română · повторение</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+:root{--bg:#ffffff;--fg:#1c1c1e;--muted:#6b7280;--card:#f3f4f6;--accent:#2563eb;--ok:#15803d;--bad:#b91c1c;--line:#e5e7eb}
+@media (prefers-color-scheme:dark){:root{--bg:#121212;--fg:#f2f2f2;--muted:#9ca3af;--card:#1f2125;--accent:#60a5fa;--ok:#4ade80;--bad:#f87171;--line:#2d2f34}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.4 -apple-system,system-ui,Segoe UI,Roboto,sans-serif;padding:16px;padding-bottom:max(16px,env(safe-area-inset-bottom))}
+main{max-width:480px;margin:0 auto}
+h1{font-size:18px;margin:0 0 4px}
+.stats{color:var(--muted);font-size:13px;margin-bottom:16px}
+.card{background:var(--card);border-radius:14px;padding:20px;margin-bottom:12px}
+.topic{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+.q{font-size:22px;margin:10px 0 4px;font-weight:600}
+.hint{color:var(--muted);font-size:14px;min-height:20px}
+input{width:100%;font-size:20px;padding:12px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--fg);margin-top:12px}
+input:focus{outline:2px solid var(--accent)}
+.row{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+button{flex:1;min-width:120px;font-size:16px;padding:12px;border-radius:10px;border:0;background:var(--accent);color:#fff;cursor:pointer}
+button.alt{background:var(--card);color:var(--fg);border:1px solid var(--line)}
+.res{margin-top:12px;font-size:17px}
+.ok{color:var(--ok)} .bad{color:var(--bad)}
+.chars{display:flex;gap:6px;margin-top:8px}
+.chars button{min-width:0;flex:1;padding:8px;font-size:18px;background:var(--card);color:var(--fg);border:1px solid var(--line)}
+.done{text-align:center;padding:32px 8px}
+small{color:var(--muted)}
+textarea{width:100%;margin-top:12px;font:13px/1.4 ui-monospace,Menlo,monospace;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--fg)}
+</style>
+</head>
+<body>
+<main>
+  <h1>Română · повторение</h1>
+  <div class="stats" id="stats"></div>
+  <div id="view"></div>
+  <div class="row"><button class="alt" id="exp">Скопировать прогресс</button><button class="alt" id="reset">Сбросить прогресс</button></div>
+  <textarea id="out" hidden readonly rows="10"></textarea>
+</main>
+<script>
+"use strict";
+/* ---------- Карточки ----------
+   Формат: [тема, вопрос, ответ, подсказка?]. Новые карточки добавляйте в конец,
+   id берётся из текста вопроса. */
+const CARDS = [];
+function add(topic, q, a, hint){ CARDS.push({id: topic+"|"+q, topic, q, a, hint: hint||""}); }
+
+/* Артикль и множественное число */
+[
+ ["casă","casa","case","casele"],
+ ["masă","masa","mese","mesele"],
+ ["carte","cartea","cărți","cărțile"],
+ ["fată","fata","fete","fetele"],
+ ["femeie","femeia","femei","femeile"],
+ ["prieten","prietenul","prieteni","prietenii"],
+ ["student","studentul","studenți","studenții"],
+ ["băiat","băiatul","băieți","băieții"],
+ ["om","omul","oameni","oamenii"],
+ ["floare","floarea","flori","florile"],
+ ["profesor","profesorul","profesori","profesorii"],
+ ["frate","fratele","frați","frații"],
+ ["cameră","camera","camere","camerele"],
+ ["elev","elevul","elevi","elevii"],
+ ["mașină","mașina","mașini","mașinile"]
+].forEach(([w,def,pl,pldef])=>{
+  add("Артикль", w+" — ед. число с артиклем", def, "одно слово");
+  add("Множественное", w+" — мн. число без артикля", pl);
+  add("Артикль", w+" — мн. число с артиклем", pldef);
+});
+add("Множественное","două ___ (carte)","cărți","после «două» мн. число");
+add("Множественное","doi ___ (băiat)","băieți");
+add("Множественное","trei ___ (carte)","cărți");
+add("Множественное","mulți ___ (om)","oameni");
+
+/* Participiu */
+[
+ ["a cumpăra","cumpărat"],["a citi","citit"],["a veni","venit"],["a învăța","învățat"],
+ ["a merge","mers"],["a face","făcut"],["a vedea","văzut"],["a avea","avut"],
+ ["a fi","fost"],["a scrie","scris"],["a spune","spus"],["a lua","luat"]
+].forEach(([inf,p])=> add("Participiu","participiu: "+inf, p));
+
+/* Perfect compus */
+[
+ ["eu (a merge)","am mers"],["tu (a face)","ai făcut"],["Maria (a vedea)","a văzut"],
+ ["noi (a merge)","am mers"],["ei (a lua)","au luat"],["eu (a citi)","am citit"],
+ ["voi (a cumpăra)","ați cumpărat"]
+].forEach(([s,a])=> add("Perfect", "perfect: "+s, a, "am/ai/a/am/ați/au + participiu"));
+
+/* Императив */
+[
+ ["a veni","vino","veni","veniți"],
+ ["a citi","citește","citi","citiți"],
+ ["a face","fă","face","faceți"],
+ ["a merge","mergi","merge","mergeți"],
+ ["a asculta","ascultă","asculta","ascultați"],
+ ["a spune","spune","spune","spuneți"]
+].forEach(([inf,aff,neg,pl])=>{
+  add("Императив","императив tu: "+inf, aff);
+  add("Императив","запрет tu: Nu ___ ! ("+inf+")", neg);
+  add("Императив","императив voi: "+inf, pl);
+});
+
+/* Конъюнктив */
+add("Конъюнктив","Vreau ___ învăț româna. (пропущено слово)","să");
+[
+ ["a merge","eu","merg"],["a merge","el/ei","meargă"],
+ ["a citi","tu","citești"],["a citi","el/ei","citească"],
+ ["a veni","noi","venim"],["a veni","el/ei","vină"],
+ ["a face","eu","fac"],["a face","el/ei","facă"],
+ ["a învăța","eu","învăț"],["a învăța","el/ei","învețe"]
+].forEach(([inf,who,a])=> add("Конъюнктив","să ___ ("+inf+", "+who+")", a, "после «să»"));
+
+/* Предлоги la / în */
+[
+ ["Merg ___ piață.","la"],["Locuiesc ___ București.","în"],["El vine ___ țară.","în"],
+ ["Merg ___ școală.","la"],["Mâncăm ___ bucătărie.","în"],["Vreau să merg ___ teatru.","la"],
+ ["Merg ___ plimbare.","la"]
+].forEach(([q,a])=> add("la / în", q, a, "la = событие/место деятельности; în = страна, город, помещение"));
+add("Правописание","limba ___ (română)","română","â в середине, ă на конце");
+add("Правописание","la ___ (plimbare)","plimbare");
+
+/* ---------- Состояние ---------- */
+const INTERVALS = [0,1,3,7,14,30];   // дни для коробок 0..5
+const NEW_PER_DAY = 20;
+const KEY = "ro-srs-v1";
+let state = {cards:{}, newToday:{day:"",n:0}};
+
+const tg = window.Telegram && window.Telegram.WebApp;
+if (tg){ try{ tg.ready(); tg.expand(); }catch(e){} }
+
+function dayNum(d){ d=d||new Date(); return Math.floor(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/86400000); }
+const today = dayNum();
+
+function saveLocal(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
+function saveCloud(){
+  if(!tg||!tg.CloudStorage) return;
+  try{
+    const s = JSON.stringify(state), N = 3500, parts = Math.ceil(s.length/N)||1, kv = {};
+    for(let i=0;i<parts;i++) tg.CloudStorage.setItem("s"+i, s.slice(i*N,(i+1)*N));
+    tg.CloudStorage.setItem("n", String(parts));
+  }catch(e){}
+}
+function save(){ saveLocal(); saveCloud(); }
+function loadLocal(){ try{ const s=localStorage.getItem(KEY); if(s) return JSON.parse(s); }catch(e){} return null; }
+function loadCloud(cb){
+  if(!tg||!tg.CloudStorage){ cb(null); return; }
+  try{
+    tg.CloudStorage.getItem("n",(err,n)=>{
+      const parts=parseInt(n,10);
+      if(err||!parts){ cb(null); return; }
+      const keys=[...Array(parts).keys()].map(i=>"s"+i);
+      tg.CloudStorage.getItems(keys,(e2,vals)=>{
+        if(e2||!vals){ cb(null); return; }
+        try{ cb(JSON.parse(keys.map(k=>vals[k]||"").join(""))); }catch(e){ cb(null); }
+      });
+    });
+  }catch(e){ cb(null); }
+}
+
+/* ---------- Логика ---------- */
+const norm = s => s.normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/ș/g,"s").replace(/ț/g,"t").toLowerCase().trim().replace(/\s+/g," ");
+function exact(s){ return s.normalize("NFC").trim().replace(/\s+/g," ").toLowerCase(); }
+const info = c => state.cards[c.id] || {box:0, due:0};
+
+function buildQueue(){
+  if(state.newToday.day !== String(today)) state.newToday = {day:String(today), n:0};
+  const due = CARDS.filter(c=>{const i=info(c); return i.box>0 && i.due<=today;});
+  const fresh = CARDS.filter(c=>info(c).box===0);
+  const left = Math.max(0, NEW_PER_DAY - state.newToday.n);
+  return due.concat(fresh.slice(0,left));
+}
+function grade(card, ok){
+  const i = info(card), wasNew = i.box===0;
+  let box = ok ? Math.min(5, i.box+1) : Math.max(1, i.box-1);
+  state.cards[card.id] = {box, due: today + (ok ? INTERVALS[box] : 1),
+                          w: (i.w||0) + (ok?0:1), n: (i.n||0) + 1};
+  if(wasNew) state.newToday.n++;
+  save();
+}
+
+/* ---------- Интерфейс ---------- */
+let queue = [], cur = null, retry = [], inRetry = false;
+const $ = id => document.getElementById(id);
+const esc = s => s.replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function renderStats(){
+  const learned = CARDS.filter(c=>info(c).box>=3).length;
+  const dueN = CARDS.filter(c=>{const i=info(c);return i.box>0&&i.due<=today;}).length;
+  $("stats").textContent = `Сегодня к повторению: ${dueN} · выучено (коробка ≥3): ${learned} из ${CARDS.length}`;
+}
+function next(){
+  renderStats();
+  inRetry = queue.length===0;           // повторный проход ошибок не меняет коробку
+  cur = queue.shift() || retry.shift() || null;
+  if(!cur){
+    $("view").innerHTML = '<div class="card done"><div class="q">На сегодня всё ✓</div><small>Возвращайся завтра. Новые карточки добавим после следующих уроков.</small></div>';
+    return;
+  }
+  $("view").innerHTML = `
+   <div class="card">
+     <div class="topic">${esc(cur.topic)}</div>
+     <div class="q">${esc(cur.q)}</div>
+     <div class="hint">${esc(cur.hint)}</div>
+     <input id="ans" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="ответ по-румынски">
+     <div class="chars">${["ă","â","î","ș","ț"].map(ch=>`<button type="button" data-ch="${ch}">${ch}</button>`).join("")}</div>
+     <div class="row"><button id="check">Проверить</button><button class="alt" id="idk">Не помню</button></div>
+     <div class="res" id="res"></div>
+   </div>`;
+  const inp = $("ans"); inp.focus();
+  inp.addEventListener("keydown", e=>{ if(e.key==="Enter") check(); });
+  $("check").onclick = check; $("idk").onclick = ()=>reveal(false,"");
+  document.querySelectorAll(".chars button").forEach(b=>b.onclick=()=>{inp.value+=b.dataset.ch;inp.focus();});
+}
+function check(){
+  const v = $("ans").value; if(!v.trim()) return;
+  const ok = norm(v)===norm(cur.a);
+  const diacOk = exact(v)===exact(cur.a);
+  reveal(ok, diacOk ? "" : "Правильно, но с диакритикой: ");
+}
+function reveal(ok, note){
+  if(!inRetry){ grade(cur, ok); if(!ok) retry.push(cur); }   // ошибка → повтор в конце сессии
+  else if(!ok) retry.push(cur);
+  $("res").innerHTML = (ok
+    ? `<span class="ok">✓ ${note}<b>${esc(cur.a)}</b></span>`
+    : `<span class="bad">✗ Правильно: <b>${esc(cur.a)}</b></span>`)
+    + '<div class="row"><button id="nx">Дальше</button></div>';
+  $("check").disabled = true; $("idk").disabled = true; $("ans").disabled = true;
+  $("nx").focus(); $("nx").onclick = next;
+}
+$("exp").onclick = ()=>{
+  const by = {};
+  CARDS.forEach(c=>{
+    const i = info(c), t = by[c.topic] || (by[c.topic] = {cards:0,seen:0,learned:0,n:0,w:0});
+    t.cards++; if(i.n) t.seen++; if(i.box>=3) t.learned++; t.n += i.n||0; t.w += i.w||0;
+  });
+  const weak = CARDS.filter(c=>(info(c).w||0)>0).sort((a,b)=>info(b).w-info(a).w).slice(0,15);
+  let s = "Прогресс " + new Date().toISOString().slice(0,10) + "\n";
+  Object.keys(by).forEach(k=>{ const t=by[k];
+    s += `${k}: карточек ${t.cards}, начато ${t.seen}, выучено ${t.learned}, ответов ${t.n}, ошибок ${t.w}\n`; });
+  if(weak.length) s += "Слабые места:\n" + weak.map(c=>{const i=info(c); return `- ${c.q} → ${c.a} (ошибок ${i.w} из ${i.n})`;}).join("\n") + "\n";
+  const out = $("out"); out.hidden = false; out.value = s; out.focus(); out.select();
+  try{ navigator.clipboard.writeText(s).then(()=>{ $("exp").textContent = "Скопировано ✓"; }).catch(()=>{}); }catch(e){}
+};
+$("reset").onclick = ()=>{
+  if(!$("reset").dataset.sure){ $("reset").dataset.sure="1"; $("reset").textContent="Точно сбросить? Нажми ещё раз"; return; }
+  state = {cards:{}, newToday:{day:"",n:0}}; save(); location.reload();
+};
+
+/* ---------- Старт ---------- */
+(function init(){
+  const local = loadLocal();
+  loadCloud(cloud=>{
+    const pick = cloud || local;               // облако Telegram в приоритете
+    if(pick && pick.cards) state = pick;
+    queue = buildQueue(); next();
+  });
+})();
+</script>
+</body>
+</html>
