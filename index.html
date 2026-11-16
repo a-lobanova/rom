@@ -28,6 +28,7 @@ button.alt{background:var(--card);color:var(--fg);border:1px solid var(--line)}
 .chars button{min-width:0;flex:1;padding:8px;font-size:18px;background:var(--card);color:var(--fg);border:1px solid var(--line)}
 .done{text-align:center;padding:32px 8px}
 small{color:var(--muted)}
+.secname{font-weight:600;margin-bottom:2px}
 textarea{width:100%;margin-top:12px;font:13px/1.4 ui-monospace,Menlo,monospace;padding:10px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--fg)}
 </style>
 </head>
@@ -45,7 +46,13 @@ textarea{width:100%;margin-top:12px;font:13px/1.4 ui-monospace,Menlo,monospace;p
    Формат: [тема, вопрос, ответ, подсказка?]. Новые карточки добавляйте в конец,
    id берётся из текста вопроса. */
 const CARDS = [];
-function add(topic, q, a, hint){ CARDS.push({id: topic+"|"+q, topic, q, a, hint: hint||""}); }
+/* Раздел (sec) определяет, в каком списке карточка видна. id остаётся прежним (topic|q),
+   чтобы не потерять прогресс. */
+function sectionOf(topic, q){
+  if(topic==="Артикль" || topic==="Множественное") return "Артикль и множественное число";
+  return topic.replace(/^Урок: /,"");
+}
+function add(topic, q, a, hint){ CARDS.push({id: topic+"|"+q, topic, sec: sectionOf(topic,q), q, a, hint: hint||""}); }
 
 /* Артикль и множественное число */
 [
@@ -218,6 +225,18 @@ add("Правописание","la ___ (plimbare)","plimbare");
  ["În ___ Soroca se află o cetate medievală. (raion)","raionul"]
 ].forEach(([q,a])=> add("Урок: упражнения (Moldova)", q, a));
 
+/* Клитики (аккузатив) */
+[
+ ["Îmi place Maria. ___ văd în fiecare zi. (pe ea)","o"],
+ ["Ion este prietenul meu. ___ văd în fiecare zi. (pe el)","îl"],
+ ["Copiii sunt acasă. ___ văd pe copii. (pe ei, м.р.)","îi"],
+ ["Fetele sunt la școală. ___ văd pe fete. (pe ele)","le"],
+ ["Tu ___ vezi pe mine. (меня)","mă"],
+ ["Eu ___ iubesc pe tine. (тебя)","te"],
+ ["Ei ___ văd pe noi. (нас)","ne"],
+ ["Noi ___ vedem pe voi. (вас)","vă"]
+].forEach(([q,a])=> add("Клитики", q, a, "клитик стоит перед глаголом; для человека после глагола ещё pe"));
+
 /* ---------- Состояние ---------- */
 const INTERVALS = [0,1,3,7,14,30];   // дни для коробок 0..5
 const NEW_PER_DAY = 20;
@@ -261,12 +280,22 @@ const norm = s => s.normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/ș/g,"s").r
 function exact(s){ return s.normalize("NFC").trim().replace(/\s+/g," ").toLowerCase(); }
 const info = c => state.cards[c.id] || {box:0, due:0};
 
-function buildQueue(){
+function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+/* sec=null: все разделы. practice=true: вся тема вперемешку (расписание не меняется). */
+function buildQueue(sec, practice){
+  const pool = sec ? CARDS.filter(c=>c.sec===sec) : CARDS;
+  if(practice) return shuffle(pool.slice());
   if(state.newToday.day !== String(today)) state.newToday = {day:String(today), n:0};
-  const due = CARDS.filter(c=>{const i=info(c); return i.box>0 && i.due<=today;});
-  const fresh = CARDS.filter(c=>info(c).box===0);
+  const due = pool.filter(c=>{const i=info(c); return i.box>0 && i.due<=today;});
+  const fresh = pool.filter(c=>info(c).box===0);
   const left = Math.max(0, NEW_PER_DAY - state.newToday.n);
   return due.concat(fresh.slice(0,left));
+}
+/* тренировка: только счётчики ответов и ошибок, коробка и срок не меняются */
+function record(card, ok){
+  const i = info(card);
+  state.cards[card.id] = Object.assign({}, i, {w:(i.w||0)+(ok?0:1), n:(i.n||0)+1});
+  save();
 }
 function grade(card, ok){
   const i = info(card), wasNew = i.box===0;
@@ -278,7 +307,38 @@ function grade(card, ok){
 }
 
 /* ---------- Интерфейс ---------- */
-let queue = [], cur = null, retry = [], inRetry = false;
+let queue = [], cur = null, retry = [], inRetry = false, practiceMode = false;
+
+function secStats(sec){
+  const pool = CARDS.filter(c=>c.sec===sec);
+  return {
+    t: pool.length,
+    due: pool.filter(c=>{const i=info(c); return i.box>0 && i.due<=today;}).length,
+    fresh: pool.filter(c=>info(c).box===0).length,
+    learned: pool.filter(c=>info(c).box>=3).length
+  };
+}
+function showHome(){
+  renderStats();
+  const secs = [...new Set(CARDS.map(c=>c.sec))];
+  let h = '<div class="card"><div class="secname">Все разделы по расписанию</div><small>карточки, срок которых пришёл, и новые</small><div class="row"><button id="all">Начать</button></div></div>';
+  secs.forEach((s,i)=>{
+    const st = secStats(s);
+    h += `<div class="card"><div class="secname">${esc(s)}</div>
+      <small>всего ${st.t} · к повторению ${st.due} · новых ${st.fresh} · выучено ${st.learned}</small>
+      <div class="row"><button data-i="${i}" data-m="s">По расписанию</button><button class="alt" data-i="${i}" data-m="p">Вся тема</button></div></div>`;
+  });
+  $("view").innerHTML = h;
+  $("all").onclick = ()=>start(null,false);
+  document.querySelectorAll("button[data-m]").forEach(b=>{
+    b.onclick = ()=>start(secs[+b.dataset.i], b.dataset.m==="p");
+  });
+}
+function start(sec, practice){
+  practiceMode = practice; retry = [];
+  queue = buildQueue(sec, practice);
+  next();
+}
 const $ = id => document.getElementById(id);
 const esc = s => s.replace(/[&<>"]/g, c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
@@ -292,12 +352,14 @@ function next(){
   inRetry = queue.length===0;           // повторный проход ошибок не меняет коробку
   cur = queue.shift() || retry.shift() || null;
   if(!cur){
-    $("view").innerHTML = '<div class="card done"><div class="q">На сегодня всё ✓</div><small>Возвращайся завтра. Новые карточки добавим после следующих уроков.</small></div>';
+    $("view").innerHTML = '<div class="card done"><div class="q">Готово ✓</div><small>По расписанию здесь больше ничего нет. Чтобы потренироваться ещё, выбери «Вся тема».</small><div class="row"><button id="back">← К разделам</button></div></div>';
+    $("back").onclick = showHome;
     return;
   }
   $("view").innerHTML = `
    <div class="card">
-     <div class="topic">${esc(cur.topic)}</div>
+     <div class="row" style="margin:0 0 10px"><button class="alt" id="back">← Разделы</button></div>
+     <div class="topic">${esc(cur.sec)}${practiceMode ? " · тренировка" : ""}</div>
      <div class="q">${esc(cur.q)}</div>
      <div class="hint">${esc(cur.hint)}</div>
      <input id="ans" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="ответ по-румынски">
@@ -308,6 +370,7 @@ function next(){
   const inp = $("ans"); inp.focus();
   inp.addEventListener("keydown", e=>{ if(e.key==="Enter") check(); });
   $("check").onclick = check; $("idk").onclick = ()=>reveal(false,"");
+  $("back").onclick = showHome;
   document.querySelectorAll(".chars button").forEach(b=>b.onclick=()=>{inp.value+=b.dataset.ch;inp.focus();});
 }
 function check(){
@@ -317,7 +380,7 @@ function check(){
   reveal(ok, diacOk ? "" : "Правильно, но с диакритикой: ");
 }
 function reveal(ok, note){
-  if(!inRetry){ grade(cur, ok); if(!ok) retry.push(cur); }   // ошибка → повтор в конце сессии
+  if(!inRetry){ if(practiceMode) record(cur, ok); else grade(cur, ok); if(!ok) retry.push(cur); }   // ошибка → повтор в конце сессии
   else if(!ok) retry.push(cur);
   $("res").innerHTML = (ok
     ? `<span class="ok">✓ ${note}<b>${esc(cur.a)}</b></span>`
@@ -329,7 +392,7 @@ function reveal(ok, note){
 $("exp").onclick = ()=>{
   const by = {};
   CARDS.forEach(c=>{
-    const i = info(c), t = by[c.topic] || (by[c.topic] = {cards:0,seen:0,learned:0,n:0,w:0});
+    const i = info(c), t = by[c.sec] || (by[c.sec] = {cards:0,seen:0,learned:0,n:0,w:0});
     t.cards++; if(i.n) t.seen++; if(i.box>=3) t.learned++; t.n += i.n||0; t.w += i.w||0;
   });
   const weak = CARDS.filter(c=>(info(c).w||0)>0).sort((a,b)=>info(b).w-info(a).w).slice(0,15);
@@ -351,7 +414,7 @@ $("reset").onclick = ()=>{
   loadCloud(cloud=>{
     const pick = cloud || local;               // облако Telegram в приоритете
     if(pick && pick.cards) state = pick;
-    queue = buildQueue(); next();
+    showHome();
   });
 })();
 </script>
