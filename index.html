@@ -307,7 +307,7 @@ function grade(card, ok){
 }
 
 /* ---------- Интерфейс ---------- */
-let queue = [], cur = null, retry = [], inRetry = false, practiceMode = false;
+let queue = [], cur = null, retry = [], inRetry = false, practiceMode = false, curSec = null, notice = "";
 
 function secStats(sec){
   const pool = CARDS.filter(c=>c.sec===sec);
@@ -335,7 +335,7 @@ function showHome(){
   });
 }
 function start(sec, practice){
-  practiceMode = practice; retry = [];
+  practiceMode = practice; curSec = sec; retry = []; notice = "";
   queue = buildQueue(sec, practice);
   next();
 }
@@ -351,22 +351,26 @@ function next(){
   renderStats();
   inRetry = queue.length===0;           // повторный проход ошибок не меняет коробку
   cur = queue.shift() || retry.shift() || null;
-  if(!cur){
-    $("view").innerHTML = '<div class="card done"><div class="q">Готово ✓</div><small>По расписанию здесь больше ничего нет. Чтобы потренироваться ещё, выбери «Вся тема».</small><div class="row"><button id="back">← К разделам</button></div></div>';
-    $("back").onclick = showHome;
-    return;
+  if(!cur){                                 // карточки кончились: новый круг вперемешку, без конца
+    const pool = curSec ? CARDS.filter(c=>c.sec===curSec) : CARDS;
+    if(!pool.length){ showHome(); return; }
+    if(!practiceMode){ practiceMode = true; notice = "Расписание пройдено, дальше свободная тренировка"; }
+    queue = shuffle(pool.slice());
+    inRetry = false;
+    cur = queue.shift();
   }
   $("view").innerHTML = `
    <div class="card">
      <div class="row" style="margin:0 0 10px"><button class="alt" id="back">← Разделы</button></div>
      <div class="topic">${esc(cur.sec)}${practiceMode ? " · тренировка" : ""}</div>
      <div class="q">${esc(cur.q)}</div>
-     <div class="hint">${esc(cur.hint)}</div>
+     <div class="hint">${notice ? "<b>"+esc(notice)+"</b><br>" : ""}${esc(cur.hint)}</div>
      <input id="ans" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="ответ по-румынски">
      <div class="chars">${["ă","â","î","ș","ț"].map(ch=>`<button type="button" data-ch="${ch}">${ch}</button>`).join("")}</div>
      <div class="row"><button id="check">Проверить</button><button class="alt" id="idk">Не помню</button></div>
      <div class="res" id="res"></div>
    </div>`;
+  notice = "";
   const inp = $("ans"); inp.focus();
   inp.addEventListener("keydown", e=>{ if(e.key==="Enter") check(); });
   $("check").onclick = check; $("idk").onclick = ()=>reveal(false,"");
