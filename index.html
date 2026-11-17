@@ -237,6 +237,45 @@ add("Правописание","la ___ (plimbare)","plimbare");
  ["Noi ___ vedem pe voi. (вас)","vă"]
 ].forEach(([q,a])=> add("Клитики", q, a, "клитик стоит перед глаголом; для человека после глагола ещё pe"));
 
+/* Возвратные глаголы */
+[
+ ["eu (a se trezi)","mă trezesc"],
+ ["tu (a se spăla)","te speli"],
+ ["ea (a se îmbrăca)","se îmbracă"],
+ ["noi (a se plimba)","ne plimbăm"],
+ ["voi (a se odihni)","vă odihniți"],
+ ["ei (a se trezi)","se trezesc"],
+ ["eu (a se îmbrăca)","mă îmbrac"],
+ ["voi (a se îmbrăca)","vă îmbrăcați"],
+ ["Apoi ___ la serviciu. (eu, a merge: не возвратный глагол)","merg"]
+].forEach(([q,a])=> add("Возвратные глаголы", q, a, "mă / te / se / ne / vă / se + глагол"));
+
+/* Лексика: текст «Manuscrisul Voynich» (LingoSeven) */
+[
+ ["рукопись","manuscris"],
+ ["обман, мистификация","înșelătorie"],
+ ["прошлое","trecut"],
+ ["неизвестный (м.р.)","necunoscut"],
+ ["странный (м.р.)","ciudat"],
+ ["изображение","imagine"],
+ ["алхимик","alchimist"],
+ ["учёные","oamenii de știință"],
+ ["ответ","răspuns"],
+ ["загадка","enigmă"],
+ ["понимать","a înțelege"],
+ ["находить","a găsi"],
+ ["быть похожим на","a semăna cu"]
+].forEach(([q,a])=> add("Лексика: Manuscrisul Voynich", q, a, "по-румынски"));
+
+/* într-o / într-un */
+[
+ ["Locuiesc ___ casă mare. (în + o)","într-o"],
+ ["El lucrează ___ oraș mic. (în + un)","într-un"],
+ ["A fost scris ___ limbă necunoscută. (în + o)","într-o"],
+ ["Cartea este ___ cutie. (în + o)","într-o"],
+ ["Sunt ___ sat mic. (în + un)","într-un"]
+].forEach(([q,a])=> add("într-o / într-un", q, a, "în + un = într-un, în + o = într-o"));
+
 /* ---------- Состояние ---------- */
 const INTERVALS = [0,1,3,7,14,30];   // дни для коробок 0..5
 const NEW_PER_DAY = 20;
