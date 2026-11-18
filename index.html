@@ -276,6 +276,79 @@ add("Правописание","la ___ (plimbare)","plimbare");
  ["Sunt ___ sat mic. (în + un)","într-un"]
 ].forEach(([q,a])=> add("într-o / într-un", q, a, "în + un = într-un, în + o = într-o"));
 
+/* Конъюнктив: ещё формы el/ei (18.11) */
+[
+ ["a cumpăra","el/ei","cumpere"],["a lucra","el/ei","lucreze"],
+ ["a mânca","el/ei","mănânce"],["a cânta","el/ei","cânte"],
+ ["a vorbi","el/ei","vorbească"],["a cumpăra","eu","cumpăr"],
+ ["a lucra","eu","lucrez"],["a vorbi","eu","vorbesc"]
+].forEach(([inf,who,a])=> add("Конъюнктив","să ___ ("+inf+", "+who+")", a, "после «să»; el/ei: -ă→-e, -e→-ă, -ește→-ească"));
+
+/* Будущее: o să + конъюнктив */
+[
+ ["Mâine eu o să ___ la școală. (a merge)","merg"],
+ ["Mâine el o să ___ fructe. (a cumpăra)","cumpere"],
+ ["Mâine noi o să ___ o carte. (a citi)","citim"],
+ ["Mâine ei o să ___ acasă. (a lucra)","lucreze"],
+ ["Mâine eu o să ___ produse. (a cumpăra)","cumpăr"],
+ ["Mâine ea o să ___ la telefon. (a vorbi)","vorbească"],
+ ["Mâine el o să ___ românește. (a învăța)","învețe"],
+ ["Mâine ei o să ___ la magazin. (a merge)","meargă"],
+ ["Mâine ___ merg la magazin. (будущее: o ...)","o să"]
+].forEach(([q,a])=> add("Будущее (o să)", q, a, "o să + форма как после să; el/ei: o să cumpere"));
+
+/* Лексика: профессии (учебник A1–A2, с. 141) */
+[
+ ["врач","doctor"],["нотариус","notar"],["художник","pictor"],["актёр","actor"],
+ ["медбрат / медсестра","asistent"],["певец","cântăreț"],["юрист, адвокат","avocat"],
+ ["учитель, преподаватель","profesor"],["исследователь","cercetător"],
+ ["переводчик (письменный)","traducător"],["танцор","dansator"],["строитель","constructor"],
+ ["переводчик (устный), исполнитель","interpret"],["инженер","inginer"],["архитектор","arhitect"],
+ ["фармацевт","farmacist"],["экономист","economist"],["таксист","taximetrist"],
+ ["полицейский","polițist"],["стоматолог","dentist"],["археолог","arheolog"],["биолог","biolog"],
+ ["пекарь","brutar"],["кондитер","cofetar"],["садовник","grădinar"],["рыбак","pescar"],
+ ["репортёр","reporter"],["редактор","redactor"],["фермер","fermier"],["водитель","șofer"],
+ ["офицер","ofițer"],["солдат","soldat"],["водолаз","scafandru"],["моряк, штурман","navigator"],
+ ["автомеханик","mecanic auto"],["бухгалтер","contabil"],["няня","bonă"]
+].forEach(([q,a])=> add("Лексика: профессии", q, a, "по-румынски; муж. форма, как в учебнике"));
+
+/* Лексика: спорт (учебник A1–A2, с. 137–138, упр. 15–17 с. 139) */
+[
+ ["футбол","fotbal"],["футболист","fotbalist"],["гандбол","handbal"],["баскетбол","baschet"],
+ ["волейбол","volei"],["шахматы","șah"],["бокс","box"],["лёгкая атлетика","atletism"],
+ ["гимнастика","gimnastică"],["плавание","înot"],["пловец","înotător"],
+ ["фигурное катание","patinaj artistic"],["лыжи (спорт)","schi"],["лыжник","schior"],
+ ["теннис","tenis"],["велосипед","bicicletă"],["велосипедист","biciclist"],
+ ["борьба, боевые искусства","lupte"],["гребля","canotaj"],["матч","meci"],
+ ["ворота","poartă"],["судья","arbitru"],["вратарь","portar"],["счёт (в игре)","scor"],
+ ["стадион","stadion"],["болельщики, трибуна","galerie"],["каток","patinoar"]
+].forEach(([q,a])=> add("Лексика: спорт", q, a, "по-румынски"));
+
+/* Работа над ошибками (упр. 15–17, 18.11) */
+[
+ ["Noi ___ la meci la TV. (a se uita, noi)","ne uităm"],
+ ["Tu ___ să mergi la patinoar? (a vrea, tu)","vrei"],
+ ["Îmi place ___ mă uit la sportivi. (пропущено слово)","să"],
+ ["Patinajul este ___ . (красивый, м.р.)","frumos"],
+ ["Sportul este ___ . (интересный, м.р.)","interesant"],
+ ["Gimnastica este ___ . (красивая, ж.р.)","frumoasă"],
+ ["Gimnastica este ___ . (интересная, ж.р.)","interesantă"],
+ ["Sportivii sunt ___ . (красивые, м.р. мн.)","frumoși"],
+ ["Îmi place tenisul, ___ este un sport frumos. (потому что)","pentru că"],
+ ["___ am studiat la universitate, am jucat tenis. (когда)","Când"],
+ ["Ieri am ___ tenis. (a practica, причастие)","practicat"],
+ ["Astăzi am mers la magazin și ___ cumpărat produse. (пропущено слово)","am"],
+ ["Mâine eu o să ___ la școală și o să ___ acasă. (a merge / a lucra: напиши два слова через пробел)","merg lucrez"]
+].forEach(([q,a])=> add("Работа над ошибками (упр. 15–17)", q, a, "ne uităm / vrei / -os, -ant (м.р.) / pentru că / când"));
+
+[
+ ["вид спорта: катание на коньках","patinaj"],["конькобежец, фигурист (человек)","patinator"],
+ ["велоспорт","ciclism"],["корт, поле","teren"],["суббота","sâmbătă"],
+ ["в каждую субботу","în fiecare sâmbătă"],["когда","când"],["потому что","pentru că"],
+ ["матчи (мн.)","meciuri"],["продукты (мн.)","produse"],["каток (по-румынски)","patinoar"],
+ ["Хорошо, идём!","Bine, mergem"]
+].forEach(([q,a])=> add("Лексика: спорт", q, a, "по-румынски"));
+
 /* ---------- Состояние ---------- */
 const INTERVALS = [0,1,3,7,14,30];   // дни для коробок 0..5
 const NEW_PER_DAY = 20;
