@@ -349,6 +349,26 @@ add("Правописание","la ___ (plimbare)","plimbare");
  ["Хорошо, идём!","Bine, mergem"]
 ].forEach(([q,a])=> add("Лексика: спорт", q, a, "по-румынски"));
 
+/* Эссе про теннис (18.11) */
+[
+ ["Ieri eu ___ o cămașă. (a îmbrăca, перфект: напиши am + причастие)","am îmbrăcat"],
+ ["Am îmbrăcat ___ frumoase. (костюмы, мн.)","costume"],
+ ["un costum, două ___ (мн.)","costume"],
+ ["Costumele sunt ___ . (красивые, ж.р. мн.)","frumoase"],
+ ["Fructele sunt ___ . (красивые, ж.р. мн.)","frumoase"],
+ ["Nu ___ avut succes la tenis. (am / a)","am"],
+ ["Nu am avut ___ la tenis. (успех)","succes"],
+ ["Costumul meu ___ foarte frumos. (a fi, перфект: a ...)","a fost"],
+ ["Costumul meu a fost ___ frumos. (очень)","foarte"],
+ ["Costumul meu a fost cel ___ frumos. (самый)","mai"],
+ ["Ieri eu ___ la magazin. (a fi, перфект: am ...)","am fost"]
+].forEach(([q,a])=> add("Работа над ошибками (упр. 15–17)", q, a, "am + причастие -at; ср. род мн. → как женский: frumoase"));
+
+[
+ ["успех","succes"],["костюм","costum"],["очень","foarte"],["самый красивый","cel mai frumos"],
+ ["надевать, одеваться","a îmbrăca"],["не иметь успеха","a nu avea succes"]
+].forEach(([q,a])=> add("Лексика: спорт", q, a, "по-румынски"));
+
 /* ---------- Состояние ---------- */
 const INTERVALS = [0,1,3,7,14,30];   // дни для коробок 0..5
 const NEW_PER_DAY = 20;
