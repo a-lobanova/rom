@@ -36,9 +36,13 @@ textarea{width:100%;margin-top:12px;font:13px/1.4 ui-monospace,Menlo,monospace;p
 <main>
   <h1>Română · повторение</h1>
   <div class="stats" id="stats"></div>
+  <div class="stats" id="sync"></div>
   <div id="view"></div>
   <div class="row"><button class="alt" id="exp">Скопировать прогресс</button><button class="alt" id="reset">Сбросить прогресс</button></div>
+  <div class="row"><button class="alt" id="bak">Резервная копия</button><button class="alt" id="rst">Восстановить из копии</button></div>
   <textarea id="out" hidden readonly rows="10"></textarea>
+  <textarea id="imp" hidden rows="6" placeholder="Вставь сюда копию и нажми «Загрузить»"></textarea>
+  <div class="row" id="impRow" hidden><button id="impGo">Загрузить копию</button></div>
 </main>
 <script>
 "use strict";
@@ -369,6 +373,74 @@ add("Правописание","la ___ (plimbare)","plimbare");
  ["надевать, одеваться","a îmbrăca"],["не иметь успеха","a nu avea succes"]
 ].forEach(([q,a])=> add("Лексика: спорт", q, a, "по-румынски"));
 
+/* Профессия, будущее литературное (19.11) */
+[
+ ["Visul meu este să fiu ___ . (medic: профессия без артикля)","medic"],
+ ["Sunt ___ . (inginer: профессия без артикля)","inginer"],
+ ["Vreau să ___ pacienții. (a trata, eu)","tratez"],
+ ["Medicul ___ pacienții. (a trata, el)","tratează"],
+ ["Vreau ca el să ___ pacienții. (a trata)","trateze"],
+ ["pacient — мн. число без артикля","pacienți"],
+ ["pacient — мн. число с артиклем","pacienții"],
+ ["Mâine eu ___ merge la magazin. (voi/vei/va/vom/veți/vor)","voi"],
+ ["Tu ___ citi cartea. (voi/vei/va/vom/veți/vor)","vei"],
+ ["El ___ lucra acasă. (voi/vei/va/vom/veți/vor)","va"],
+ ["Noi ___ învăța româna. (voi/vei/va/vom/veți/vor)","vom"],
+ ["Voi ___ veni mâine? (voi/vei/va/vom/veți/vor)","veți"],
+ ["Ei ___ cumpăra produse. (voi/vei/va/vom/veți/vor)","vor"],
+ ["Eu nu ___ merge la școală. (будущее, 2 слова)","voi merge"]
+].forEach(([q,a])=> add("Будущее (o să)", q, a, "voi/vei/va/vom/veți/vor + инфинитив без «a»; nu стоит перед voi"));
+
+[
+ ["пациент","pacient"],["лечить","a trata"],["мечта","vis"],["будущее","viitor"],
+ ["в будущем","în viitor"],["каток (по-румынски)","patinoar"],["ресторан","restaurant"]
+].forEach(([q,a])=> add("Лексика: профессии", q, a, "по-румынски"));
+
+/* Лексика из аудирования (19.11) */
+[
+ ["сошедший с ума, обезумевший","înnebunit"],
+ ["сходить с ума","a înnebuni"],
+ ["оставлять, позволять","a lăsa"],
+ ["он оставляет, она оставляет","lasă"],
+ ["боль","durere"],
+ ["менять веру","a schimba credința"],
+ ["вера","credință"],
+ ["кукловод","păpușar"],
+ ["кукловод (с артиклем)","păpușarul"]
+].forEach(([q,a])=> add("Лексика: аудирование", q, a, "слова из аудирования, по-румынски"));
+
+/* Аудирование: «De ce înnebunim din dragoste?» (LingoSeven) */
+[
+ ["любовь","dragoste"],["стихи","poezii"],["ночью (с артиклем)","noaptea"],["днём (с артиклем)","ziua"],
+ ["оставаться","a rămâne"],["спрашивать","a întreba"],["отвечать","a răspunde"],["кто-то","cineva"],
+ ["другие (м.р. мн.)","alții"],["что-то другое","altceva"],["сердце","inimă"],["гормоны","hormoni"],
+ ["наука","știință"],["помогать","a ajuta"],["страсть, увлечение","pasiune"],["странно","ciudat"],
+ ["всё (с артиклем)","totul"],["вести себя","a se purta"],["управлять, контролировать","a controla"]
+].forEach(([q,a])=> add("Лексика: аудирование", q, a, "слова из текста «De ce înnebunim din dragoste?»"));
+
+[
+ ["Prietenii întreabă: „___?” (ты сошёл с ума? a înnebuni, перфект)","Ai înnebunit"],
+ ["Știința ne ___ ajuta. (voi/vei/va/vom/veți/vor)","va"],
+ ["Să ne ___ la pasiune. (a se uita, noi)","uităm"],
+ ["Ei ___ schimbă viața. (свою: își/îți/îmi)","își"],
+ ["Cineva ___ schimbă credința. (свою: își/îți/îmi)","își"],
+ ["Despre ce ___ vorbi? (noi, будущее)","vom"],
+ ["Ziua ___ ingineri. (ei, a fi)","sunt"],
+ ["Ei lasă ___ și merg în alt oraș. (всё)","totul"],
+ ["Ei ___ totul și merg în alt oraș. (a lăsa, ei)","lasă"]
+].forEach(([q,a])=> add("Грамматика из аудирования", q, a, "își = свой/свою; ne va ajuta: ne стоит перед va; ziua, noaptea = днём, ночью"));
+
+/* Качества и недостатки (учебник A1–A2, с. 143), ж.р. */
+[
+ ["внимательная (ж.р.)","atentă"],["умная (ж.р.)","inteligentă"],["искренняя (ж.р.)","sinceră"],
+ ["трудолюбивая (ж.р.)","harnică"],["организованная (ж.р.)","organizată"],["терпеливая (ж.р.)","răbdătoare"],
+ ["смелая (ж.р.)","curajoasă"],["вежливая (ж.р.)","politicoasă"],["щедрая (ж.р.)","generoasă"],
+ ["разговорчивая (ж.р.)","vorbăreață"],["добрая (ж.р.)","bună"],["злая (ж.р.)","rea"],
+ ["нетерпеливая (ж.р.)","nerăbdătoare"],["невнимательная (ж.р.)","neatentă"],["ленивая (ж.р.)","leneșă"],
+ ["трусливая (ж.р.)","fricoasă"],["скупая (ж.р.)","zgârcită"],["лживая (ж.р.)","mincinoasă"],
+ ["Vreau să fiu ___ răbdătoare. (более)","mai"],["Sunt ___ nerăbdătoare. (немного)","puțin"]
+].forEach(([q,a])=> add("Лексика: качества", q, a, "ж.р. ед.: -ă; -or → -oare; -os → -oasă; rea — исключение"));
+
 /* ---------- Состояние ---------- */
 const INTERVALS = [0,1,3,7,14,30];   // дни для коробок 0..5
 const NEW_PER_DAY = 20;
@@ -382,29 +454,69 @@ function dayNum(d){ d=d||new Date(); return Math.floor(Date.UTC(d.getFullYear(),
 const today = dayNum();
 
 function saveLocal(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
-function saveCloud(){
-  if(!tg||!tg.CloudStorage) return;
-  try{
-    const s = JSON.stringify(state), N = 3500, parts = Math.ceil(s.length/N)||1, kv = {};
-    for(let i=0;i<parts;i++) tg.CloudStorage.setItem("s"+i, s.slice(i*N,(i+1)*N));
-    tg.CloudStorage.setItem("n", String(parts));
-  }catch(e){}
+let cloudOk = false;          // облако прочитано без ошибки: только тогда пишем в него
+let cloudFail = false;        // последняя запись в облако не удалась
+let cloudTimer = null;
+function setSync(){
+  const el = document.getElementById("sync"); if(!el) return;
+  let t;
+  if(!tg || !tg.CloudStorage) t = "Прогресс хранится только в этом браузере";
+  else if(!cloudOk) t = "⚠ Облако Telegram не ответило: прогресс сохраняется только на этом устройстве. Закрой и открой приложение ещё раз.";
+  else if(cloudFail) t = "⚠ Не удалось записать прогресс в облако Telegram";
+  else t = "Прогресс сохранён в облаке Telegram ✓";
+  el.textContent = t;
 }
+function flushCloud(){
+  if(!tg||!tg.CloudStorage||!cloudOk) return;
+  clearTimeout(cloudTimer); cloudTimer = null;
+  const s = JSON.stringify(state), N = 3500, parts = Math.ceil(s.length/N)||1;
+  let pending = parts, failed = false;
+  const done = ()=>{ cloudFail = failed; setSync(); };
+  try{
+    for(let i=0;i<parts;i++) tg.CloudStorage.setItem("s"+i, s.slice(i*N,(i+1)*N), (err,ok)=>{
+      if(err||!ok) failed = true;
+      if(--pending===0){
+        if(failed) done();
+        else tg.CloudStorage.setItem("n", String(parts), (e,o)=>{ if(e||!o) failed = true; done(); });
+      }
+    });
+  }catch(e){ failed = true; done(); }
+}
+function saveCloud(){
+  if(!tg||!tg.CloudStorage||!cloudOk) return;
+  clearTimeout(cloudTimer); cloudTimer = setTimeout(flushCloud, 400);
+}
+document.addEventListener("visibilitychange", ()=>{ if(document.hidden && cloudTimer) flushCloud(); });
 function save(){ saveLocal(); saveCloud(); }
 function loadLocal(){ try{ const s=localStorage.getItem(KEY); if(s) return JSON.parse(s); }catch(e){} return null; }
+/* cb(state|null, ok): ok=false — облако не ответило или ответило ошибкой (это не то же самое, что «пусто») */
 function loadCloud(cb){
-  if(!tg||!tg.CloudStorage){ cb(null); return; }
+  if(!tg||!tg.CloudStorage){ cb(null,false); return; }
+  let fired = false;
+  const fin = (st,ok)=>{ if(fired) return; fired = true; clearTimeout(tm); cb(st,ok); };
+  const tm = setTimeout(()=>fin(null,false), 6000);
   try{
     tg.CloudStorage.getItem("n",(err,n)=>{
+      if(err){ fin(null,false); return; }
       const parts=parseInt(n,10);
-      if(err||!parts){ cb(null); return; }
+      if(!parts){ fin(null,true); return; }       // облако отвечает, данных ещё нет
       const keys=[...Array(parts).keys()].map(i=>"s"+i);
       tg.CloudStorage.getItems(keys,(e2,vals)=>{
-        if(e2||!vals){ cb(null); return; }
-        try{ cb(JSON.parse(keys.map(k=>vals[k]||"").join(""))); }catch(e){ cb(null); }
+        if(e2||!vals){ fin(null,false); return; }
+        try{ fin(JSON.parse(keys.map(k=>vals[k]||"").join("")),true); }catch(e){ fin(null,false); }
       });
     });
-  }catch(e){ cb(null); }
+  }catch(e){ fin(null,false); }
+}
+/* слияние: по каждой карточке берём версию с большим числом ответов */
+function mergeStates(a,b){
+  const out = {cards:{}, newToday:{day:"",n:0}};
+  [a,b].forEach(st=>{
+    if(!st||!st.cards) return;
+    for(const k in st.cards){ const c=st.cards[k], o=out.cards[k]; if(!o || (c.n||0)>(o.n||0)) out.cards[k]=c; }
+    if(st.newToday && (st.newToday.day > out.newToday.day || (st.newToday.day===out.newToday.day && st.newToday.n>out.newToday.n))) out.newToday = st.newToday;
+  });
+  return out;
 }
 
 /* ---------- Логика ---------- */
@@ -539,17 +651,36 @@ $("exp").onclick = ()=>{
   const out = $("out"); out.hidden = false; out.value = s; out.focus(); out.select();
   try{ navigator.clipboard.writeText(s).then(()=>{ $("exp").textContent = "Скопировано ✓"; }).catch(()=>{}); }catch(e){}
 };
+$("bak").onclick = ()=>{
+  const out = $("out"); out.hidden = false; out.value = "ROPROGRESS:" + JSON.stringify(state); out.focus(); out.select();
+  try{ navigator.clipboard.writeText(out.value).then(()=>{ $("bak").textContent = "Копия скопирована ✓"; }).catch(()=>{}); }catch(e){}
+};
+$("rst").onclick = ()=>{ $("imp").hidden = false; $("impRow").hidden = false; $("imp").focus(); };
+$("impGo").onclick = ()=>{
+  try{
+    const t = $("imp").value.trim().replace(/^ROPROGRESS:/,"");
+    const st = JSON.parse(t);
+    if(!st || !st.cards) throw 0;
+    state = mergeStates(state, st); saveLocal(); if(cloudOk) flushCloud();
+    $("imp").hidden = true; $("impRow").hidden = true; $("imp").value = "";
+    setSync(); showHome();
+  }catch(e){ $("impGo").textContent = "Не похоже на копию, проверь текст"; }
+};
 $("reset").onclick = ()=>{
   if(!$("reset").dataset.sure){ $("reset").dataset.sure="1"; $("reset").textContent="Точно сбросить? Нажми ещё раз"; return; }
-  state = {cards:{}, newToday:{day:"",n:0}}; save(); location.reload();
+  state = {cards:{}, newToday:{day:"",n:0}}; saveLocal(); flushCloud(); setTimeout(()=>location.reload(), 1200);
 };
 
 /* ---------- Старт ---------- */
 (function init(){
   const local = loadLocal();
-  loadCloud(cloud=>{
-    const pick = cloud || local;               // облако Telegram в приоритете
-    if(pick && pick.cards) state = pick;
+  loadCloud((cloud,ok)=>{
+    cloudOk = ok;
+    state = mergeStates(cloud, local);          // ничего не теряем: берём лучшее из облака и этого устройства
+    saveLocal();
+    if(cloudOk && cloud && JSON.stringify(cloud)!==JSON.stringify(state)) saveCloud();   // догоняем облако
+    else if(cloudOk && !cloud && Object.keys(state.cards).length) saveCloud();           // облако пустое, а здесь есть данные
+    setSync();
     showHome();
   });
 })();
