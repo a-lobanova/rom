@@ -441,6 +441,65 @@ add("Правописание","la ___ (plimbare)","plimbare");
  ["Vreau să fiu ___ răbdătoare. (более)","mai"],["Sunt ___ nerăbdătoare. (немного)","puțin"]
 ].forEach(([q,a])=> add("Лексика: качества", q, a, "ж.р. ед.: -ă; -or → -oare; -os → -oasă; rea — исключение"));
 
+/* Прилагательные во мн. числе, prefer, школа (21.11) */
+[
+ ["Prefer oamenii ___ . (generos, мн. м.р.)","generoși"],
+ ["Prefer oamenii ___ . (sincer, мн. м.р.)","sinceri"],
+ ["Prefer femeile ___ . (atent, мн. ж.р.)","atente"],
+ ["Prefer femeile ___ . (tăcut, мн. ж.р.)","tăcute"],
+ ["Eu ___ oamenii sinceri. (a prefera)","prefer"],
+ ["Prefer ca o femeie să ___ atentă. (a fi)","fie"],
+ ["Eu nu voi merge la ___ . (школа)","școală"],
+ ["Vreau ___ cumpăr produse. (пропущено слово)","să"],
+ ["Vreau să cumpăr ___ . (продукты, мн.)","produse"]
+].forEach(([q,a])=> add("Работа над ошибками (упр. 15–17)", q, a, "adj: м.р. мн. -i (s→ș, t→ț), ж.р. мн. -e; vreau să + глагол"));
+
+/* Пересказ текста про любовь: ei merg / scriu / dorm (21.11) */
+[
+ ["Oamenii ___ în alt oraș. (a merge, ei)","merg"],
+ ["Ei ___ poezii. (a scrie, ei)","scriu"],
+ ["Ei nu ___ noaptea. (a dormi, ei)","dorm"],
+ ["El ___ noaptea. (a dormi, el)","doarme"],
+ ["Tu ___ noaptea? (a dormi, tu)","dormi"],
+ ["___ schimbă viața. (любовь с артиклем, подлежащее)","Dragostea"],
+ ["Ei nu dorm ___ . (ночью, с артиклем)","noaptea"],
+ ["Oamenii lasă ___ . (всё)","totul"]
+].forEach(([q,a])=> add("Грамматика из аудирования", q, a, "ei: merg, scriu, dorm (не el-форма); noaptea = ночью"));
+
+/* Дательный падеж: клитики (22.11) */
+[
+ ["Maria ___ dă o carte. (мне)","îmi"],
+ ["Ion ___ spune adevărul. (тебе)","îți"],
+ ["Eu ___ scriu mamei. (ей)","îi"],
+ ["Noi ___ dăm un cadou. (им)","le"],
+ ["El ___ trimite un mesaj. (нам)","ne"],
+ ["El ___ dă o carte. (вам)","vă"],
+ ["Eu ___ telefonez lui Ion. (ему)","îi"],
+ ["Ion este prietenul meu. Eu ___ dau un cadou. (îl/îi)","îi"],
+ ["Ion este prietenul meu. Eu ___ văd în fiecare zi. (îl/îi)","îl"],
+ ["Maria este profesoară. Eu ___ ajut. (o/îi: a ajuta — аккузатив)","o"],
+ ["Ieri eu ___ scris mamei. (ей: îi + am)","i-am"],
+ ["Ieri eu ___ dat cartea. (тебе: îți + am)","ți-am"],
+ ["Îți ___ ceaiul? (a plăcea, el/ea)","place"],
+ ["Îți place ___ ? (чай с артиклем)","ceaiul"],
+ ["чай","ceai"]
+].forEach(([q,a])=> add("Дательный падеж (клитики)", q, a, "кому? îmi, îți, îi, ne, vă, le; клитик = получатель, а не подлежащее; a ajuta → аккузатив"));
+
+/* Дательный падеж: слияние с am/a, слова (22.11) */
+[
+ ["Ieri eu ___ scris o scrisoare. (вам: vă + am)","v-am"],
+ ["Ieri eu ___ dat cadouri. (им: le + am)","le-am"],
+ ["El ___ spus adevărul. (нам: ne + a)","ne-a"],
+ ["Ea ___ dat o carte. (мне: îmi + a)","mi-a"],
+ ["письмо (послание)","scrisoare"],
+ ["Îi scriu o ___ . (письмо)","scrisoare"],
+ ["подарок","cadou"],
+ ["два подарка","două cadouri"],
+ ["рассказ, сказка","poveste"],
+ ["история (наука, прошлое)","istorie"],
+ ["Îi spun o ___ . (рассказ)","poveste"]
+].forEach(([q,a])=> add("Дательный падеж (клитики)", q, a, "îmi/îți/îi/ne/vă/le + am/a сливаются: mi-a, ți-am, i-am, ne-a, v-am, le-am"));
+
 /* ---------- Состояние ---------- */
 const INTERVALS = [0,1,3,7,14,30];   // дни для коробок 0..5
 const NEW_PER_DAY = 20;
