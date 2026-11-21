@@ -509,7 +509,7 @@ add("Правописание","la ___ (plimbare)","plimbare");
 
 /* ---------- Состояние ---------- */
 const INTERVALS = [0,1,3,7,14,30];   // дни для коробок 0..5
-const NEW_PER_DAY = 20;
+const NEW_PER_DAY = 20;   // новых карточек в день; кнопка «Ещё 10 новых» добавляет сверху
 const KEY = "ro-srs-v1";
 let state = {cards:{}, newToday:{day:"",n:0}};
 
@@ -595,11 +595,28 @@ function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.rand
 function buildQueue(sec, practice){
   const pool = sec ? CARDS.filter(c=>c.sec===sec) : CARDS;
   if(practice) return shuffle(pool.slice());
-  if(state.newToday.day !== String(today)) state.newToday = {day:String(today), n:0};
+  if(state.newToday.day !== String(today)) state.newToday = {day:String(today), n:0, extra:0};
   const due = pool.filter(c=>{const i=info(c); return i.box>0 && i.due<=today;});
-  const fresh = pool.filter(c=>info(c).box===0);
-  const left = Math.max(0, NEW_PER_DAY - state.newToday.n);
-  return due.concat(fresh.slice(0,left));
+  const fresh = interleave(pool.filter(c=>info(c).box===0));
+  const left = newLeft();
+  return shuffle(due.concat(fresh.slice(0,left)));
+}
+/* новые карточки берём по кругу из всех разделов, чтобы каждый день были разные темы */
+function interleave(cards){
+  const by = {}; cards.forEach(c=>{ (by[c.sec] = by[c.sec] || []).push(c); });
+  const lists = Object.values(by), out = [];
+  const max = lists.reduce((m,l)=>Math.max(m,l.length),0);
+  for(let i=0;i<max;i++) lists.forEach(l=>{ if(i<l.length) out.push(l[i]); });
+  return out;
+}
+function newLeft(){
+  if(state.newToday.day !== String(today)) state.newToday = {day:String(today), n:0, extra:0};
+  return Math.max(0, NEW_PER_DAY + (state.newToday.extra||0) - state.newToday.n);
+}
+/* слабые места: карточки, где ошибок не меньше трети ответов */
+function weakCards(){
+  return CARDS.filter(c=>{const i=info(c); return (i.w||0)>0 && (i.w/(i.n||1))>=0.34;})
+              .sort((a,b)=>(info(b).w||0)-(info(a).w||0)).slice(0,40);
 }
 /* тренировка: только счётчики ответов и ошибок, коробка и срок не меняются */
 function record(card, ok){
@@ -617,7 +634,7 @@ function grade(card, ok){
 }
 
 /* ---------- Интерфейс ---------- */
-let queue = [], cur = null, retry = [], inRetry = false, practiceMode = false, curSec = null, notice = "";
+let queue = [], cur = null, retry = [], inRetry = false, practiceMode = false, curSec = null, notice = "", weakMode = false;
 
 function secStats(sec){
   const pool = CARDS.filter(c=>c.sec===sec);
@@ -631,7 +648,10 @@ function secStats(sec){
 function showHome(){
   renderStats();
   const secs = [...new Set(CARDS.map(c=>c.sec))];
-  let h = '<div class="card"><div class="secname">Все разделы по расписанию</div><small>карточки, срок которых пришёл, и новые</small><div class="row"><button id="all">Начать</button></div></div>';
+  const dueAll = CARDS.filter(c=>{const i=info(c); return i.box>0 && i.due<=today;}).length;
+  const weakN = weakCards().length;
+  let h = `<div class="card"><div class="secname">Задание на сегодня</div><small>к повторению ${dueAll} · новых ещё можно взять сегодня ${newLeft()} (новые берутся из разных тем)</small><div class="row"><button id="all">Начать</button><button class="alt" id="more">Ещё 10 новых</button></div></div>
+  <div class="card"><div class="secname">Слабые места</div><small>карточки, где ошибок много: ${weakN}. Это тренировка, сроки не меняются</small><div class="row"><button class="alt" id="weak">Повторить слабые</button></div></div>`;
   secs.forEach((s,i)=>{
     const st = secStats(s);
     h += `<div class="card"><div class="secname">${esc(s)}</div>
@@ -640,12 +660,19 @@ function showHome(){
   });
   $("view").innerHTML = h;
   $("all").onclick = ()=>start(null,false);
+  $("more").onclick = ()=>{ if(state.newToday.day!==String(today)) state.newToday={day:String(today),n:0,extra:0}; state.newToday.extra=(state.newToday.extra||0)+10; save(); start(null,false); };
+  $("weak").onclick = ()=>{
+    weakMode = true; practiceMode = true; curSec = null; retry = []; notice = "";
+    queue = shuffle(weakCards());
+    if(!queue.length){ weakMode = false; notice = ""; $("weak").textContent = "Пока нет слабых мест"; return; }
+    next();
+  };
   document.querySelectorAll("button[data-m]").forEach(b=>{
     b.onclick = ()=>start(secs[+b.dataset.i], b.dataset.m==="p");
   });
 }
 function start(sec, practice){
-  practiceMode = practice; curSec = sec; retry = []; notice = "";
+  weakMode = false; practiceMode = practice; curSec = sec; retry = []; notice = "";
   queue = buildQueue(sec, practice);
   next();
 }
@@ -662,9 +689,9 @@ function next(){
   inRetry = queue.length===0;           // повторный проход ошибок не меняет коробку
   cur = queue.shift() || retry.shift() || null;
   if(!cur){                                 // карточки кончились: новый круг вперемешку, без конца
-    const pool = curSec ? CARDS.filter(c=>c.sec===curSec) : CARDS;
+    const pool = weakMode ? weakCards() : (curSec ? CARDS.filter(c=>c.sec===curSec) : CARDS);
     if(!pool.length){ showHome(); return; }
-    if(!practiceMode){ practiceMode = true; notice = "Расписание пройдено, дальше свободная тренировка"; }
+    if(!practiceMode){ practiceMode = true; notice = "Расписание пройдено, дальше свободная тренировка. Хочешь новые карточки? Вернись в разделы и нажми «Ещё 10 новых»."; }
     queue = shuffle(pool.slice());
     inRetry = false;
     cur = queue.shift();
