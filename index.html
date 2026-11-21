@@ -523,12 +523,14 @@ function saveLocal(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }ca
 let cloudOk = false;          // облако прочитано без ошибки: только тогда пишем в него
 let cloudFail = false;        // последняя запись в облако не удалась
 let cloudTimer = null;
+let cloudWhy = "", cloudTry = 0;
 function setSync(){
   const el = document.getElementById("sync"); if(!el) return;
   let t;
   if(!tg || !tg.CloudStorage) t = "Прогресс хранится только в этом браузере";
-  else if(!cloudOk) t = "⚠ Облако Telegram не ответило: прогресс сохраняется только на этом устройстве. Закрой и открой приложение ещё раз.";
-  else if(cloudFail) t = "⚠ Не удалось записать прогресс в облако Telegram";
+  else if(!cloudOk && cloudTry>0 && cloudTry<4) t = "Подключаюсь к облаку Telegram… (попытка "+cloudTry+" из 3)";
+  else if(!cloudOk) t = "⚠ Облако Telegram не ответило ("+(cloudWhy||"нет ответа")+"). Прогресс пока только на этом устройстве. Нажми сюда, чтобы повторить.";
+  else if(cloudFail) t = "⚠ Не удалось записать прогресс в облако Telegram. Нажми сюда, чтобы повторить.";
   else t = "Прогресс сохранён в облаке Telegram ✓";
   el.textContent = t;
 }
@@ -555,24 +557,24 @@ function saveCloud(){
 document.addEventListener("visibilitychange", ()=>{ if(document.hidden && cloudTimer) flushCloud(); });
 function save(){ saveLocal(); saveCloud(); }
 function loadLocal(){ try{ const s=localStorage.getItem(KEY); if(s) return JSON.parse(s); }catch(e){} return null; }
-/* cb(state|null, ok): ok=false — облако не ответило или ответило ошибкой (это не то же самое, что «пусто») */
+/* cb(state|null, ok, why): ok=false — облако не ответило или ответило ошибкой (это не то же самое, что «пусто») */
 function loadCloud(cb){
-  if(!tg||!tg.CloudStorage){ cb(null,false); return; }
+  if(!tg||!tg.CloudStorage){ cb(null,false,"нет CloudStorage"); return; }
   let fired = false;
-  const fin = (st,ok)=>{ if(fired) return; fired = true; clearTimeout(tm); cb(st,ok); };
-  const tm = setTimeout(()=>fin(null,false), 6000);
+  const fin = (st,ok,why)=>{ if(fired) return; fired = true; clearTimeout(tm); cb(st,ok,why||""); };
+  const tm = setTimeout(()=>fin(null,false,"нет ответа 10 секунд"), 10000);
   try{
     tg.CloudStorage.getItem("n",(err,n)=>{
-      if(err){ fin(null,false); return; }
+      if(err){ fin(null,false,"ошибка: "+err); return; }
       const parts=parseInt(n,10);
       if(!parts){ fin(null,true); return; }       // облако отвечает, данных ещё нет
       const keys=[...Array(parts).keys()].map(i=>"s"+i);
       tg.CloudStorage.getItems(keys,(e2,vals)=>{
-        if(e2||!vals){ fin(null,false); return; }
-        try{ fin(JSON.parse(keys.map(k=>vals[k]||"").join("")),true); }catch(e){ fin(null,false); }
+        if(e2||!vals){ fin(null,false,"ошибка чтения: "+(e2||"пусто")); return; }
+        try{ fin(JSON.parse(keys.map(k=>vals[k]||"").join("")),true); }catch(e){ fin(null,false,"данные в облаке повреждены"); }
       });
     });
-  }catch(e){ fin(null,false); }
+  }catch(e){ fin(null,false,"исключение: "+(e&&e.message||e)); }
 }
 /* слияние: по каждой карточке берём версию с большим числом ответов */
 function mergeStates(a,b){
@@ -634,6 +636,7 @@ function grade(card, ok){
 }
 
 /* ---------- Интерфейс ---------- */
+let onHome = true;
 let queue = [], cur = null, retry = [], inRetry = false, practiceMode = false, curSec = null, notice = "", weakMode = false;
 
 function secStats(sec){
@@ -646,6 +649,7 @@ function secStats(sec){
   };
 }
 function showHome(){
+  onHome = true;
   renderStats();
   const secs = [...new Set(CARDS.map(c=>c.sec))];
   const dueAll = CARDS.filter(c=>{const i=info(c); return i.box>0 && i.due<=today;}).length;
@@ -685,6 +689,7 @@ function renderStats(){
   $("stats").textContent = `Сегодня к повторению: ${dueN} · выучено (коробка ≥3): ${learned} из ${CARDS.length}`;
 }
 function next(){
+  onHome = false;
   renderStats();
   inRetry = queue.length===0;           // повторный проход ошибок не меняет коробку
   cur = queue.shift() || retry.shift() || null;
@@ -765,17 +770,31 @@ $("reset").onclick = ()=>{
 };
 
 /* ---------- Старт ---------- */
+function connectCloud(){
+  cloudTry++; setSync();
+  loadCloud((cloud,ok,why)=>{
+    if(ok){
+      cloudOk = true; cloudWhy = "";
+      const before = JSON.stringify(state);
+      state = mergeStates(cloud, state);
+      saveLocal();
+      if(JSON.stringify(cloud)!==JSON.stringify(state)) flushCloud();
+      cloudTry = 0; setSync();
+      if(onHome && before!==JSON.stringify(state)) showHome();
+    } else {
+      cloudWhy = why;
+      if(cloudTry<3) setTimeout(connectCloud, 3000);
+      else { cloudTry = 4; setSync(); }
+    }
+  });
+}
 (function init(){
   const local = loadLocal();
-  loadCloud((cloud,ok)=>{
-    cloudOk = ok;
-    state = mergeStates(cloud, local);          // ничего не теряем: берём лучшее из облака и этого устройства
-    saveLocal();
-    if(cloudOk && cloud && JSON.stringify(cloud)!==JSON.stringify(state)) saveCloud();   // догоняем облако
-    else if(cloudOk && !cloud && Object.keys(state.cards).length) saveCloud();           // облако пустое, а здесь есть данные
-    setSync();
-    showHome();
-  });
+  state = mergeStates(null, local);
+  setSync(); showHome();
+  if(tg && tg.CloudStorage) connectCloud();
+  const el = document.getElementById("sync");
+  if(el) el.onclick = ()=>{ if(tg && tg.CloudStorage && (!cloudOk || cloudFail)){ cloudTry = 0; cloudFail = false; if(cloudOk) flushCloud(); else connectCloud(); } };
 })();
 </script>
 </body>
