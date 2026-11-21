@@ -500,6 +500,13 @@ add("Правописание","la ___ (plimbare)","plimbare");
  ["Îi spun o ___ . (рассказ)","poveste"]
 ].forEach(([q,a])=> add("Дательный падеж (клитики)", q, a, "îmi/îți/îi/ne/vă/le + am/a сливаются: mi-a, ți-am, i-am, ne-a, v-am, le-am"));
 
+/* Настоящее время глаголов на -i типа «-esc» (22.11) */
+[
+ ["a citi: tu","citești"],["a citi: el/ea","citește"],["a citi: voi","citiți"],["a citi: ei/ele","citesc"],
+ ["a vorbi: tu","vorbești"],["a vorbi: el/ea","vorbește"],["a vorbi: voi","vorbiți"],["a vorbi: ei/ele","vorbesc"],
+ ["a locui: eu","locuiesc"],["a locui: tu","locuiești"],["a locui: el/ea","locuiește"],["a locui: voi","locuiți"]
+].forEach(([q,a])=> add("Настоящее время: a citi, a vorbi, a locui", q, a, "tu -ești, el -ește, voi -iți, eu/ei -esc"));
+
 /* ---------- Состояние ---------- */
 const INTERVALS = [0,1,3,7,14,30];   // дни для коробок 0..5
 const NEW_PER_DAY = 20;
