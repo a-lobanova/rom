@@ -507,6 +507,82 @@ add("Правописание","la ___ (plimbare)","plimbare");
  ["a locui: eu","locuiesc"],["a locui: tu","locuiești"],["a locui: el/ea","locuiește"],["a locui: voi","locuiți"]
 ].forEach(([q,a])=> add("Настоящее время: a citi, a vorbi, a locui", q, a, "tu -ești, el -ește, voi -iți, eu/ei -esc"));
 
+/* Лексика и чтение: efectul placebo */
+[
+ ["таблетка","pastilă"],["лекарство","medicament"],["сахар","zahăr"],["боль","durere"],
+ ["облегчение","ușurare"],["обман, уловка","păcăleală"],["сила (мн. ч.: силы)","putere"],["вера, убеждение","credință"],
+ ["гормоны","hormoni"],["мозг","creier"],["защита (организма)","apărare"],["тело, туловище","trup"],
+ ["мысли","gânduri"],["действие (лекарства)","acțiune"],["процесс (мн. ч.)","procese"],
+ ["лечить","a vindeca"],["запустить, начать","a porni"],["быть похожим на","a semăna cu"],["узнать","a afla"],
+ ["Это одна из самых скрытых сил медицины. (одна из)","una dintre"],
+ ["Aceasta este una ___ cele mai ascunse puteri din medicină. (одна из)","dintre"],
+ ["Despre ce ___ fi vorba? (будущее, он)","va"],
+ ["Imaginați-___: luați o pastilă. (вам, возвратное)","vă"],
+ ["Corpul simte ___. (облегчение)","ușurare"],
+ ["Aceste ___ seamănă cu acțiunea medicamentelor. (процессы)","procese"],
+ ["Dar cum poate credința să schimbe ___? (гормоны с артиклем)","hormonii"]
+].forEach(([q,a])=> add("Чтение: efectul placebo", q, a, "ce/ci = «че/чи»: ace-sta = а-ЧЕС-та; hormoni = «х»; ușurare ≠ ușoare; dintre = одно слово"));
+
+/* Притяжательные */
+[
+ ["моя книга","cartea mea"],["мой друг","prietenul meu"],["мои друзья","prietenii mei"],["мои сёстры","surorile mele"],
+ ["твоя мама","mama ta"],["твой брат","fratele tău"],["твои друзья","prietenii tăi"],["твои книги","cărțile tale"],
+ ["его мама","mama lui"],["её друзья","prietenii ei"],["их дом","casa lor"],
+ ["наш дом","casa noastră"],["наш друг","prietenul nostru"],["наши друзья","prietenii noștri"],["наши книги","cărțile noastre"],
+ ["ваша книга","cartea voastră"],["ваш друг","prietenul vostru"],["ваши друзья","prietenii voștri"],["ваши книги","cărțile voastre"],
+ ["сестра (мн. ч.)","surori"],["сёстры (с артиклем)","surorile"],
+ ["Prietenii ___ sunt aici. (мои)","mei"],["Casa ___ este mare. (наш дом)","noastră"],["Mama ___ lucrează. (его)","lui"]
+].forEach(([q,a])=> add("Притяжательные", q, a, "после сущ. с артиклем; согласуется с предметом: meu/mea/mei/mele, tău/ta/tăi/tale, nostru/noastră/noștri/noastre; lui, ei, lor не меняются; soră → surori"));
+
+/* Прилагательные: 4 формы */
+[
+ ["harnic: м. мн. ч.","harnici"],["harnic: ж. ед. ч.","harnică"],["harnic: ж. мн. ч.","harnice"],
+ ["inteligent: м. мн. ч.","inteligenți"],["inteligent: ж. ед. ч.","inteligentă"],["inteligent: ж. мн. ч.","inteligente"],
+ ["frumos: м. мн. ч.","frumoși"],["frumos: ж. ед. ч.","frumoasă"],["frumos: ж. мн. ч.","frumoase"],
+ ["sincer: м. мн. ч.","sinceri"],["sincer: ж. мн. ч.","sincere"],
+ ["mare: мн. ч. (м. и ж.)","mari"],
+ ["doi băieți ___ (harnic)","harnici"],["două fete ___ (inteligentă)","inteligente"],["copii ___ (frumos)","frumoși"],
+ ["case ___ (mare)","mari"],["mame ___ (harnică)","harnice"],["prieteni ___ (sincer)","sinceri"],
+ ["муж (ед. ч.)","soț"],["жена, супруга","soție"],["мужья, супруги","soți"],
+ ["Și prietenii lui sunt ___. (harnic, мн. ч.)","harnici"],["Mama mea este ___. (inteligentă)","inteligentă"]
+].forEach(([q,a])=> add("Прилагательные: 4 формы", q, a, "м. мн. -i, ж. мн. -e; c перед i/e читается «ч»; -os → -oși / -oasă → -oase; t → ț; mare → mari"));
+
+/* Работа над ошибками: повторение 22.11 */
+[
+ ["Vreau ca el ___ la magazin. (a merge)","meargă"],["Vreau ca ei ___ la magazin. (a merge)","meargă"],
+ ["Ea ___ dă o carte. (мне)","îmi"],["его сёстры","surorile lui"],["их сёстры","surorile lor"],
+ ["этот ресторан (acest-, до существительного)","acest restaurant"],["ресторан (ед. ч., с артиклем)","restaurantul"],
+ ["ei (a se îmbrăca)","se îmbracă"],["el (a se îmbrăca)","se îmbracă"],
+ ["Ieri eu ___ la magazin. (a merge, перфект)","am mers"],["Ieri eu ___ lecțiile. (a face, перфект)","am făcut"],
+ ["с моей семьёй","cu familia mea"],["работа, место службы","serviciu"],
+ ["Mâine eu o să ___ limba română. (a învăța)","învăț"],["две девочки, две дочери","două fete"],
+ ["Prietenii lui ___ frumoși. (a fi)","sunt"],["Prietenii lui sunt ___. (frumos, мн. ч.)","frumoși"],
+ ["Мне нравится кофе. (кофе с артиклем)","Îmi place cafeaua"]
+].forEach(([q,a])=> add("Работа над ошибками (повторение 22.11)", q, a, "el/ei: -e → -ă (meargă); îmi/îți/îi — дательный; restaurant; ț, ș, ă — диакритика; sunt при мн. подлежащем"));
+
+/* Аудирование: Cum funcționează Wi-Fi-ul? */
+[
+ ["рядом, соседний (ж. р.)","alăturată"],["загружаться (о почте, он/она)","se încarcă"],["медленно","încet"],
+ ["обычный, привычный (ж. р.)","obișnuită"],["жизнь","viața"],["жизни (род. п.: «современной жизни»)","vieții"],
+ ["комната (без артикля)","cameră"],["кабель","cablu"],["кабели","cabluri"],["антенна","antenă"],["антенны","antene"],
+ ["видеоролик","videoclip"],["видеоролики","videoclipuri"],["кошка","pisică"],["кошки","pisici"],["кафе","cafenea"],
+ ["понятая, понятая всеми (ж. р.)","înțeleasă"],["все (все люди, «весь мир»)","toată lumea"],["сразу, немедленно","imediat"],
+ ["необходимые (мн. ч.)","necesare"],["видимые (мн. ч.)","vizibile"],["смотреть на, смотреть (видео)","a se uita la"],
+ ["Мы смотрим видеоролики.","Ne uităm la videoclipuri"],["вы можете (a putea)","puteți"],["вы берёте (a lua)","luați"],
+ ["вы входите (a intra)","intrați"],["объяснение","explicație"],["объяснения","explicații"],
+ ["Amândouă fetele sunt ___. (терпеливые)","răbdătoare"],["Я хочу быть фигуристкой (ж.).","Vreau să fiu patinatoare"],
+ ["фигурное катание","patinaj artistic"],["немного нетерпеливая","puțin nerăbdătoare"],["немного сахара","puțin zahăr"],
+ ["много людей: mulți ___","oameni"],["Toți ___ muncesc. (люди с артиклем)","oamenii"]
+].forEach(([q,a])=> add("Лексика: Wi-Fi (аудирование)", q, a, "-ți на конце: «ц» (puteți, luați); ă на конце жен. слов пишем; amândouă; om → oameni; obișnuită — через «о»"));
+
+/* Родительный/дательный существительных */
+[
+ ["casa (mama) → casa ___","mamei"],["cartea (prietenul) → cartea ___","prietenului"],["jucăriile (copiii) → jucăriile ___","copiilor"],
+ ["numele (sora) → numele ___","surorii"],["ușa (casa) → ușa ___","casei"],["părerea (prietenii) → părerea ___","prietenilor"],
+ ["începutul (viața) → începutul ___","vieții"],["fata → род. п. (девочки)","fetei"],["cartea → род. п. (книги)","cărții"],
+ ["Cartea este a ___. (Maria)","Mariei"]
+].forEach(([q,a])=> add("Родительный/дательный (сущ.)", q, a, "ж.: -a → -ei (casei, mamei), -ea → -ții (cărții, vieții); м.: -ul → -ului; мн.: -ii/-le → -ilor/-lor; fata → fetei, sora → surorii"));
+
 /* ---------- Состояние ---------- */
 const INTERVALS = [0,1,3,7,14,30];   // дни для коробок 0..5
 const NEW_PER_DAY = 20;   // новых карточек в день; кнопка «Ещё 10 новых» добавляет сверху
