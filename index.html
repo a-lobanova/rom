@@ -583,6 +583,25 @@ add("Правописание","la ___ (plimbare)","plimbare");
  ["Cartea este a ___. (Maria)","Mariei"]
 ].forEach(([q,a])=> add("Родительный/дательный (сущ.)", q, a, "ж.: -a → -ei (casei, mamei), -ea → -ții (cărții, vieții); м.: -ul → -ului; мн.: -ii/-le → -ilor/-lor; fata → fetei, sora → surorii"));
 
+/* Множественное число: -ie / -ție, toți + артикль */
+[
+ ["informație → мн. ч.","informații"],["informația → мн. ч. с артиклем","informațiile"],
+ ["familie → мн. ч.","familii"],["familia → мн. ч. с артиклем","familiile"],["lecție → мн. ч.","lecții"],["femeie → мн. ч. (исключение)","femei"],
+ ["Toți ___ sunt aici. (om, с артиклем)","oamenii"],["Toate ___ sunt aici. (informație, с артиклем)","informațiile"],
+ ["Jucăriile copiilor sunt ___. (mare)","mari"]
+].forEach(([q,a])=> add("Множественное число: -ie, toți", q, a, "-ie → -ii (familii, informații); с артиклем -ii → -iile; femeie → femei; tot/toți/toate + сущ. с артиклем: toți oamenii; mare → mari"));
+
+/* Степени сравнения */
+[
+ ["Maria este ___ înaltă decât Ana. (более)","mai"],["Maria este mai înaltă ___ Ana. (чем)","decât"],
+ ["Ion este la fel ___ harnic ca Petru.","de"],["Ion este la fel de harnic ___ Petru. (как)","ca"],
+ ["самая умная (fată)","cea mai inteligentă"],["самые лучшие (prieteni)","cei mai buni"],
+ ["самые красивые (case)","cele mai frumoase"],["самый большой (м. р.)","cel mai mare"],
+ ["Cartea asta este ___ bună decât cartea aceea. (более)","mai"],["лучше (книга, ж. р.: прилагательное)","mai bună"],
+ ["Ea cântă ___ . (лучше, наречие)","mai bine"],["Eu sunt ___ mică decât sora mea. (более)","mai"],
+ ["Eu sunt mai mică decât ___ mea. (сестра с артиклем)","sora"],["больше (количество)","mai mult"],["меньше (количество)","mai puțin"]
+].forEach(([q,a])=> add("Степени сравнения", q, a, "mai + прил. + decât; la fel de + прил. + ca; cel/cea/cei/cele mai + прил. (артикль по сущ.); bună (прил.) ≠ bine (нареч.); cele mai frumoase case — артикль перед сущ."));
+
 /* ---------- Состояние ---------- */
 const INTERVALS = [0,1,3,7,14,30];   // дни для коробок 0..5
 const NEW_PER_DAY = 20;   // новых карточек в день; кнопка «Ещё 10 новых» добавляет сверху
@@ -682,7 +701,9 @@ function buildQueue(sec, practice){
 /* новые карточки берём по кругу из всех разделов, чтобы каждый день были разные темы */
 function interleave(cards){
   const by = {}; cards.forEach(c=>{ (by[c.sec] = by[c.sec] || []).push(c); });
-  const lists = Object.values(by), out = [];
+  /* сначала разделы, где начато меньше всего карточек: новые темы не застревают в хвосте */
+  const startedIn = {}; CARDS.forEach(c=>{ if(info(c).box>0) startedIn[c.sec]=(startedIn[c.sec]||0)+1; });
+  const lists = Object.keys(by).sort((a,b)=>(startedIn[a]||0)-(startedIn[b]||0)).map(k=>by[k]), out = [];
   const max = lists.reduce((m,l)=>Math.max(m,l.length),0);
   for(let i=0;i<max;i++) lists.forEach(l=>{ if(i<l.length) out.push(l[i]); });
   return out;
