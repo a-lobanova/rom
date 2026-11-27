@@ -602,6 +602,42 @@ add("Правописание","la ___ (plimbare)","plimbare");
  ["Eu sunt mai mică decât ___ mea. (сестра с артиклем)","sora"],["больше (количество)","mai mult"],["меньше (количество)","mai puțin"]
 ].forEach(([q,a])=> add("Степени сравнения", q, a, "mai + прил. + decât; la fel de + прил. + ca; cel/cea/cei/cele mai + прил. (артикль по сущ.); bună (прил.) ≠ bine (нареч.); cele mai frumoase case — артикль перед сущ."));
 
+/* Степени сравнения: ошибки из письма 26.11 */
+[
+ ["Fratele meu ___ mai înalt decât eu. (a fi)","este"],["Soțul meu este la fel ___ înalt ca eu.","de"],
+ ["Orașul meu este cel mai ___. (красивый, м. р.)","frumos"],["Casa mea este ___ frumoasă. (красивая, ж. р., самая: cea mai ...)","cea mai"],
+ ["брат (с артиклем)","fratele"],["муж (с артиклем)","soțul"],["Mama mea este mai ___ decât eu. (маленькая, ж. р.)","mică"]
+].forEach(([q,a])=> add("Степени сравнения: ошибки письма", q, a, "в предложении всегда нужен глагол este; frumos (м.) / frumoasă (ж.): oa, не uo; fratele, soțul"));
+
+/* Имперфект */
+[
+ ["eu: a lucra (имперфект)","lucram"],["tu: a merge (имперфект)","mergeai"],["ea: a citi (имперфект)","citea"],
+ ["ei: a vorbi (имперфект)","vorbeau"],["eu: a avea (имперфект)","aveam"],["voi: a avea (имперфект)","aveați"],
+ ["eu: a fi (имперфект)","eram"],["tu: a fi (имперфект)","erai"],["el: a fi (имперфект)","era"],["noi: a fi (имперфект)","eram"],
+ ["voi: a fi (имперфект)","erați"],["ei: a fi (имперфект)","erau"],["eu: a face (имперфект)","făceam"],["eu: a locui (имперфект)","locuiam"],
+ ["eu: a vrea (имперфект, неправильный)","voiam"],
+ ["Ieri eu ___ la magazin. (a merge, один раз)","am mers"],["Când eram mică, eu ___ la mare. (a merge, привычка)","mergeam"],
+ ["Când am intrat, ea ___. (a citi, фон)","citea"]
+].forEach(([q,a])=> add("Имперфект", q, a, "привычка/фон/длительность → имперфект; один раз → перфект; -a: lucram; -e: mergeam; -i: citeam; a fi: eram, erai, era, eram, erați, erau; a avea: aveam…aveați; a vrea: voiam"));
+
+/* Имперфект: письмо 27.11 */
+[
+ ["она готовила (a pregăti, имперфект)","pregătea"],["обед","prânz"],["обед (с артиклем)","prânzul"],
+ ["гулять (возвратный, инфинитив)","a se plimba"],["я гуляла (имперфект, ж.)","mă plimbam"],
+ ["в деревню, за город (куда)","la țară"],["дача, дом отдыха","casă de vacanță"],
+ ["я купила (перфект)","am cumpărat"],["Ieri eu ___ la magazin. (a merge, один раз)","am mers"]
+].forEach(([q,a])=> add("Имперфект: письмо 27.11", q, a, "â в середине слова: prânz; ă в pregătea, cumpărat; daca ≠ «дача» (dacă = если); mă plimbam — возвратный в имперфекте"));
+
+/* Аудирование: Ce ne face să fim «noi»? */
+[
+ ["личность","personalitate"],["«я», самость (с артиклем)","eul"],["вы просыпаетесь (a se trezi, voi)","vă treziți"],
+ ["noi (a se trezi)","ne trezim"],["уверенный (м. р.)","sigur"],["Sunteți ___ că sunteți dumneavoastră? (уверены, м. р.)","sigur"],
+ ["лёг спать (причастие, a se culca)","culcat"],["вы легли спать вчера (перфект, voi)","v-ați culcat"],
+ ["заменённый (м. р.)","înlocuit"],["она похожа (a semăna cu, el/ea)","seamănă"],["воспоминания (с артиклем)","amintirile"],
+ ["привычки (с артиклем)","obiceiurile"],["пытаться","a încerca"],["вы (вежливо)","dumneavoastră"],
+ ["Ce ne face să ___ «noi»? (a fi, noi, конъюнктив)","fim"]
+].forEach(([q,a])=> add("Лексика: аудирование (identitate)", q, a, "vă = возвратный клитик для voi/dumneavoastră (не будущее); v-ați = vă + ați; seamănă (ă, ă); obiceiurile (ei); amintirile; să fim"));
+
 /* ---------- Состояние ---------- */
 const INTERVALS = [0,1,3,7,14,30];   // дни для коробок 0..5
 const NEW_PER_DAY = 20;   // новых карточек в день; кнопка «Ещё 10 новых» добавляет сверху
